@@ -1,5 +1,7 @@
-package com.adam.backend.productapi.dtos;
+package com.adam.backend.productapi.converter;
 
+import com.adam.backend.productapi.dtos.CategoryDTO;
+import com.adam.backend.productapi.dtos.ProductDTO;
 import com.adam.backend.productapi.models.Category;
 import com.adam.backend.productapi.models.Product;
 
