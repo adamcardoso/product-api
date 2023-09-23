@@ -19,19 +19,9 @@ public class ProductDTO {
     private String nome;
     @NotNull
     private Float preco;
-
     private String descricao;
-
     @NotNull
     private CategoryDTO category;
-
-    public void setCategoryDTO(CategoryDTO categoryDTO) {
-        this.category = categoryDTO;
-    }
-
-    public CategoryDTO getCategoryDTO() {
-        return this.category;
-    }
 
     public static ProductDTO convert(Product product) {
         ProductDTO productDTO = new ProductDTO();
@@ -41,7 +31,7 @@ public class ProductDTO {
                 product.getProductIdentifier());
         productDTO.setDescricao(product.getDescricao());
         if (product.getCategory() != null) {
-            productDTO.setCategoryDTO(
+            productDTO.setCategory(
                     CategoryDTO.convert(product.getCategory()));
         }
         return productDTO;

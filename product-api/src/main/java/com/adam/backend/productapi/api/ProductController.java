@@ -26,6 +26,7 @@ public class ProductController {
     public List<ProductDTO> getProductByCategory(@PathVariable Long categoryId) {
         return productService.getProductByCategoryId(categoryId);
     }
+
     @GetMapping("/product/{productIdentifier}")
     ProductDTO findById(@PathVariable String productIdentifier) {
         return productService
@@ -33,7 +34,7 @@ public class ProductController {
     }
     @PostMapping("/product")
     ProductDTO newProduct(@Valid @RequestBody ProductDTO productDTO) {
-        return productService.save(userDTO);
+        return productService.save(productDTO);
     }
     @DeleteMapping("/product/{id}")
     ProductDTO delete(@PathVariable Long id) throws ProductNotFoundException {

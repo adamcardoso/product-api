@@ -3,15 +3,13 @@ package com.adam.backend.productapi.services;
 import com.adam.backend.productapi.converter.DTOConverter;
 import com.adam.backend.productapi.dtos.ProductDTO;
 import com.adam.backend.productapi.exceptions.CategoryNotFoundException;
+import com.adam.backend.productapi.exceptions.ProductNotFoundException;
 import com.adam.backend.productapi.models.Product;
 import com.adam.backend.productapi.repositories.CategoryRepository;
 import com.adam.backend.productapi.repositories.ProductRepository;
-import com.adam.backend.productapi.exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -30,18 +28,17 @@ public class ProductService {
         return products
                 .stream()
                 .map(ProductDTO::convert)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    public List<ProductDTO> getProductByCategoryId(
-            Long categoryId) {
-        List<Product> products =
-                productRepository.getProductByCategory(categoryId);
+    public List<ProductDTO> getProductByCategoryId(Long categoryId) {
+        List<Product> products = productRepository.findByCategory_Id(categoryId);
         return products
                 .stream()
                 .map(ProductDTO::convert)
-                .collect(Collectors.toList());
+                .toList();
     }
+
     public ProductDTO findByProductIdentifier(
             String productIdentifier) {
         Product product = productRepository.findByProductIdentifier(productIdentifier);
@@ -50,20 +47,23 @@ public class ProductService {
         }
         return null;
     }
+
     public ProductDTO save(ProductDTO productDTO) {
-        Boolean existsCategory = categoryRepository
-                .existsById(productDTO.getCategory().getId());
+        boolean existsCategory = categoryRepository.existsById(productDTO.getCategory().getId());
         if (!existsCategory) {
             throw new CategoryNotFoundException();
         }
-        Product product = productRepository
-                .save(Product.convert(productDTO));
+        Product product = productRepository.save(Product.convert(productDTO));
         return DTOConverter.convert(product);
     }
-    public void delete(long ProductId)
-            throws ProductNotFoundException {
-        Optional<Product> Product = productRepository.findById(ProductId);
-        Product.ifPresent(productRepository::delete);
-        return null;
+    public ProductDTO delete(Long id) throws ProductNotFoundException {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+
+        // Delete the product from the repository
+        productRepository.delete(product);
+
+        // Convert and return the deleted product as a DTO
+        return ProductDTO.convert(product);
     }
 }
