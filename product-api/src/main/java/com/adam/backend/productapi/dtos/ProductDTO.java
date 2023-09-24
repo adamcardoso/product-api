@@ -13,22 +13,23 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDTO {
+    private Long id;
     @NotBlank
     private String productIdentifier;
     @NotBlank
     private String nome;
     @NotNull
-    private Float preco;
+    private Double preco;
     private String descricao;
     @NotNull
     private CategoryDTO category;
 
     public static ProductDTO convert(Product product) {
         ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
         productDTO.setNome(product.getNome());
         productDTO.setPreco(product.getPreco());
-        productDTO.setProductIdentifier(
-                product.getProductIdentifier());
+        productDTO.setProductIdentifier(product.getProductIdentifier());
         productDTO.setDescricao(product.getDescricao());
         if (product.getCategory() != null) {
             productDTO.setCategory(
